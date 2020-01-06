@@ -60,7 +60,7 @@ class AppLocalization {
   String get addition => _localizedValues[locale.languageCode]['addition'];
   String get subtraction => _localizedValues[locale.languageCode]['subtraction'];
   String get range => _localizedValues[locale.languageCode]['range'];
-  String get exercises => _localizedValues[locale.languageCode]['app_name'];
+  String get exercises => _localizedValues[locale.languageCode]['exercises'];
   String get never_done => _localizedValues[locale.languageCode]['never_done'];
   String get in_progress => _localizedValues[locale.languageCode]['in_progress'];
   String get last_done => _localizedValues[locale.languageCode]['last_done'];
