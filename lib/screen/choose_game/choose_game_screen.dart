@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:matematica_vera/config/app_localization.dart';
-import 'package:matematica_vera/model/game.dart';
-import 'package:matematica_vera/model/game_builder.dart';
+import 'package:matematica_vera/game/game.dart';
+import 'package:matematica_vera/game/game_builder.dart';
 import 'package:matematica_vera/screen/choose_game/widget/game_row_widget.dart';
 import 'package:matematica_vera/screen/game/game_screen.dart';
 

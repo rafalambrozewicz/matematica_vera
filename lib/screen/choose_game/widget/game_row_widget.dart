@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:matematica_vera/config/app_localization.dart';
 import 'package:matematica_vera/config/app_style.dart';
 import 'package:matematica_vera/core/navigator.dart';
-import 'package:matematica_vera/model/game.dart';
-import 'package:matematica_vera/model/game_builder.dart';
-import 'package:matematica_vera/model/game_type.dart';
+import 'package:matematica_vera/game/game.dart';
+import 'package:matematica_vera/game/game_config.dart';
+import 'package:matematica_vera/game/game_type.dart';
 import 'package:matematica_vera/screen/game/game_screen.dart';
 
 class GameRowWidget extends StatelessWidget {

@@ -1,6 +1,5 @@
-import 'package:flutter/material.dart';
-
-import 'game_type.dart';
+import 'package:matematica_vera/game/game_config.dart';
+import 'package:matematica_vera/game/game_type.dart';
 
 enum GameTag {
   addition_r10,
@@ -9,19 +8,6 @@ enum GameTag {
   subtraction_r20,
 }
 
-class GameConfig {
-  final GameType type;
-  final int maxNumber;
-  final int answersCount;
-  final int exerciseCount;
-
-  GameConfig({
-    @required this.type,
-    @required this.maxNumber,
-    @required this.answersCount,
-    @required this.exerciseCount
-  });
-}
 
 class GameConfigBuilder {
 
@@ -60,5 +46,4 @@ class GameConfigBuilder {
         );
     }
   }
-
 }

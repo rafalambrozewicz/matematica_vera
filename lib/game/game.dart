@@ -1,20 +1,24 @@
-import 'dart:math';
-
+import 'package:json_annotation/json_annotation.dart';
 import 'package:flutter/material.dart';
-import 'package:matematica_vera/model/answers_generator.dart';
-import 'package:matematica_vera/model/exercise.dart';
-import 'package:matematica_vera/model/game_builder.dart';
-import 'package:matematica_vera/model/game_type.dart';
-import 'package:matematica_vera/model/tuples_generator.dart';
-import 'package:tuple/tuple.dart';
+import 'package:matematica_vera/game/answers_generator.dart';
+import 'package:matematica_vera/game/exercise.dart';
+import 'package:matematica_vera/game/game_config.dart';
+import 'package:matematica_vera/game/game_type.dart';
+import 'package:matematica_vera/game/tuples_generator.dart';
 
+part 'game.g.dart';
+
+@JsonSerializable(nullable: false)
 class Game {
   final GameConfig config;
   final int currentExerciseNumber;
   final List<Exercise> exercises;
 
-
   Game(this.config, this.currentExerciseNumber, this.exercises);
+
+  factory Game.fromJson(Map<String, dynamic> json) => _$GameFromJson(json);
+
+  Map<String, dynamic> toJson() => _$GameToJson(this);
 
   copy({
     @required int currentExerciseNumber
