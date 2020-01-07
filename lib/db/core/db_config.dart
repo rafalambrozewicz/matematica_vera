@@ -21,6 +21,9 @@ class GameLastTimeDoneDao extends DatabaseAccessor<AppDb> with _$GameLastTimeDon
 
   Stream<List<GameLastTimeDoneData>> watchAll() =>
       select(gameLastTimeDone).watch();
+
+  Future<void> insert(GameLastTimeDoneCompanion c) async =>
+      await into(gameLastTimeDone).insert(c, orReplace: true);
 }
 
 class Game extends Table {
@@ -37,6 +40,9 @@ class GameDao extends DatabaseAccessor<AppDb> with _$GameDaoMixin {
 
   Stream<List<GameData>> watchAll() =>
       select(game).watch();
+
+  Future<void> insert(GameCompanion c) async =>
+      await into(game).insert(c, orReplace: true);
 }
 
 @UseMoor(
@@ -58,6 +64,3 @@ LazyDatabase _openConnection() {
     return VmDatabase(file);
   });
 }
-
-
-
