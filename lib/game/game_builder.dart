@@ -15,6 +15,7 @@ class GameConfigBuilder {
     switch (tag) {
       case GameTag.addition_r10:
         return GameConfig(
+          gameTag: GameTag.addition_r10,
           type: GameType.addition,
           maxNumber: 10,
           answersCount: 3,
@@ -23,6 +24,7 @@ class GameConfigBuilder {
 
       case GameTag.subtraction_r10:
         return GameConfig(
+          gameTag: GameTag.subtraction_r10,
           type: GameType.subtraction,
           maxNumber: 10,
           answersCount: 3,
@@ -31,6 +33,7 @@ class GameConfigBuilder {
 
       case GameTag.addition_r20:
         return GameConfig(
+          gameTag: GameTag.addition_r20,
           type: GameType.addition,
           maxNumber: 20,
           answersCount: 3,
@@ -39,6 +42,7 @@ class GameConfigBuilder {
 
       case GameTag.subtraction_r20:
         return GameConfig(
+          gameTag: GameTag.subtraction_r20,
           type: GameType.subtraction,
           maxNumber: 20,
           answersCount: 3,

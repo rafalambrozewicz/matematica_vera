@@ -14,7 +14,7 @@ class ChooseGameScreen extends StatelessWidget {
             (BuildContext context, AsyncSnapshot<SelectGameData> snapshot) =>
                 (snapshot.data != null)
                     ? _buildScreen(context, snapshot.data)
-                    : LoadingWidget(),
+                    : Material(child: LoadingWidget()),
       );
 
   Widget _buildScreen(BuildContext context, SelectGameData selectGameData) =>
@@ -27,20 +27,17 @@ class ChooseGameScreen extends StatelessWidget {
         body: SingleChildScrollView(
           child: Column(
             children: [
-              GameRowWidget(
-                config: GameConfigBuilder.forTag(GameTag.addition_r10),
-              ),
-              GameRowWidget(
-                config: GameConfigBuilder.forTag(GameTag.subtraction_r10),
-              ),
-              GameRowWidget(
-                config: GameConfigBuilder.forTag(GameTag.addition_r20),
-              ),
-              GameRowWidget(
-                config: GameConfigBuilder.forTag(GameTag.subtraction_r20),
-              ),
+              _buildGameRowWidget(GameTag.addition_r10, selectGameData),
+              _buildGameRowWidget(GameTag.subtraction_r10, selectGameData),
+              _buildGameRowWidget(GameTag.addition_r20, selectGameData),
+              _buildGameRowWidget(GameTag.subtraction_r20, selectGameData),
             ],
           ),
         ),
       );
+  Widget _buildGameRowWidget(GameTag gameTag, SelectGameData selectGameData) =>
+      GameRowWidget(
+        gameTag: gameTag,
+        lastTimeDoneOrNull: selectGameData.lastTimeGameDoneOrNull(gameTag),
+        isInProgress: selectGameData.isGameInProgress(gameTag));
 }

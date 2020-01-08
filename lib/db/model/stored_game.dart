@@ -9,6 +9,19 @@ class StoredGame {
   final GameTag gameTag;
   final Game game;
 
+  StoredGame({
+    @required this.gameTag,
+    @required this.game
+  });
+
+  StoredGame.toNextExercise(StoredGame storedGame):
+        gameTag= storedGame.gameTag,
+        game = Game(
+          storedGame.game.config,
+          storedGame.game.currentExerciseNumber + 1,
+          storedGame.game.exercises,
+        );
+
   StoredGame.from(db.GameData entry):
         gameTag = GameTag.values.firstWhere((t) => t.toString() == entry.gameTag),
         game = Game.fromJson(json.decode(entry.gameJson));

@@ -2,6 +2,7 @@ import 'package:matematica_vera/db/core/db_config.dart';
 import 'package:matematica_vera/db/model/select_game_data.dart';
 import 'package:matematica_vera/db/model/stored_game.dart';
 import 'package:matematica_vera/db/model/stored_last_done_game.dart';
+import 'package:matematica_vera/game/game_builder.dart';
 import 'package:rxdart/streams.dart';
 import 'package:rxdart/transformers.dart';
 
@@ -27,6 +28,14 @@ class DbClient {
 
   Future<void> insertStoredGame(StoredGame entry) async =>
       await _db.gameDao.insert(entry.toGameCompanion());
+
+  Future<void> removeStoredGame(GameTag gameTag) async =>
+      await _db.gameDao.removeByGameTag(gameTag);
+
+  Future<StoredGame> getGameOrNull(GameTag gameTag) async {
+    final dbGame = await _db.gameDao.getByGameTag(gameTag);
+    return dbGame != null ? StoredGame.from(dbGame) : null;
+  }
 }
 
 final dbClient = DbClient();

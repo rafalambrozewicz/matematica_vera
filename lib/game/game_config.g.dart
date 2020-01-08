@@ -8,6 +8,7 @@ part of 'game_config.dart';
 
 GameConfig _$GameConfigFromJson(Map<String, dynamic> json) {
   return GameConfig(
+    gameTag: _$enumDecode(_$GameTagEnumMap, json['gameTag']),
     type: _$enumDecode(_$GameTypeEnumMap, json['type']),
     maxNumber: json['maxNumber'] as int,
     answersCount: json['answersCount'] as int,
@@ -17,6 +18,7 @@ GameConfig _$GameConfigFromJson(Map<String, dynamic> json) {
 
 Map<String, dynamic> _$GameConfigToJson(GameConfig instance) =>
     <String, dynamic>{
+      'gameTag': _$GameTagEnumMap[instance.gameTag],
       'type': _$GameTypeEnumMap[instance.type],
       'maxNumber': instance.maxNumber,
       'answersCount': instance.answersCount,
@@ -43,6 +45,13 @@ T _$enumDecode<T>(
   }
   return value ?? unknownValue;
 }
+
+const _$GameTagEnumMap = {
+  GameTag.addition_r10: 'addition_r10',
+  GameTag.subtraction_r10: 'subtraction_r10',
+  GameTag.addition_r20: 'addition_r20',
+  GameTag.subtraction_r20: 'subtraction_r20',
+};
 
 const _$GameTypeEnumMap = {
   GameType.addition: 'addition',

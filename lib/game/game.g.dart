@@ -8,7 +8,7 @@ part of 'game.dart';
 
 Game _$GameFromJson(Map<String, dynamic> json) {
   return Game(
-    json['config'],
+    GameConfig.fromJson(json['config'] as Map<String, dynamic>),
     json['currentExerciseNumber'] as int,
     (json['exercises'] as List)
         .map((e) => Exercise.fromJson(e as Map<String, dynamic>))
