@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:matematica_vera/db/db_client.dart';
 import 'package:matematica_vera/db/model/stored_game.dart';
+import 'package:matematica_vera/db/model/stored_last_done_game.dart';
 import 'package:matematica_vera/game/game.dart';
 import 'package:matematica_vera/game/game_config.dart';
 import 'package:matematica_vera/screen/game/game_bloc_events.dart';
@@ -39,6 +40,10 @@ class GameBloc extends Bloc<GameBlocEvent, GameBlocState> {
 
         if (updatedStoredGame.game.currentExerciseNumber == config.exerciseCount) {
           await dbClient.removeStoredGame(config.gameTag);
+          await dbClient.insertStoredLastDoneGame(StoredLastDoneGame(
+            gameTag: config.gameTag,
+            dateTime: DateTime.now().toUtc()
+          ));
         } else {
           await dbClient.insertStoredGame(updatedStoredGame);
         }
@@ -79,6 +84,7 @@ class GameBloc extends Bloc<GameBlocEvent, GameBlocState> {
     return DisplayExercise.from(
         state,
         currentExerciseNumber: storedGame.game.currentExerciseNumber,
+        exerciseCount:config.exerciseCount,
         exerciseText: e.riddleObscured,
         possibleAnswers: possibleAnswers
     );

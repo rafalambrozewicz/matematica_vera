@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:matematica_vera/config/app_localization.dart';
-import 'package:matematica_vera/game/game.dart';
 import 'package:matematica_vera/game/game_config.dart';
 import 'package:matematica_vera/game/game_type.dart';
 import 'package:matematica_vera/screen/game/game_bloc.dart';
@@ -32,40 +31,37 @@ class _GameScreenState extends State<GameScreen> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    BlocProvider<GameBloc>(
-      create: (_) {
-        _bloc = GameBloc(widget.config);
-        return _bloc;
-      },
-      child: BlocBuilder<GameBloc, GameBlocState>(
-        builder: (BuildContext context, GameBlocState state) {
-          Widget w;
-
-          if (state is Loading) {
-            w = LoadingWidget();
-          } else if (state is DisplayExercise ||
-              state is DisplayCorrectAnswer ||
-              state is DisplayWrongAnswer) {
-            w = _buildExerciseScreen(state);
-          } else if (state is ExerciseFinished) {
-            w = _buildBackOrReplaySection();
-          }
-
-          return Scaffold(
-              appBar: AppBar(
-                title: Text(_genGameName(context, widget.config)),
-                centerTitle: true,
-                backgroundColor: Colors.transparent,
-              ),
-              body: w);
+  Widget build(BuildContext context) => BlocProvider<GameBloc>(
+        create: (_) {
+          _bloc = GameBloc(widget.config)..add(Initialize());
+          return _bloc;
         },
-      ),
-    );
-  }
+        child: BlocBuilder<GameBloc, GameBlocState>(
+          builder: (BuildContext context, GameBlocState state) {
+            Widget w;
 
-  Widget _buildExerciseScreen(GameBlocState state) =>
-      Column(
+            if (state is Loading) {
+              w = LoadingWidget();
+            } else if (state is DisplayExercise ||
+                state is DisplayCorrectAnswer ||
+                state is DisplayWrongAnswer) {
+              w = _buildExerciseScreen(state);
+            } else if (state is ExerciseFinished) {
+              w = _buildBackOrReplaySection();
+            }
+
+            return Scaffold(
+                appBar: AppBar(
+                  title: Text(_genGameName(context, widget.config)),
+                  centerTitle: true,
+                  backgroundColor: Colors.transparent,
+                ),
+                body: w);
+          },
+        ),
+      );
+
+  Widget _buildExerciseScreen(GameBlocState state) => Column(
         children: <Widget>[
           ProgressWidget(
             currentValue: state.currentExerciseNumber,
@@ -82,10 +78,9 @@ class _GameScreenState extends State<GameScreen> {
             ),
           ),
           OptionsWidget(
-              options:
-              state.possibleAnswers,
-              onOptionTap: (String number) => _bloc.add(AnswerSelected(number))
-          ),
+              options: state.possibleAnswers,
+              onOptionTap: (String number) =>
+                  _bloc.add(AnswerSelected(number))),
         ],
       );
 
@@ -93,14 +88,10 @@ class _GameScreenState extends State<GameScreen> {
     String operation;
     switch (config.type) {
       case GameType.addition:
-        operation = AppLocalization
-            .of(ctx)
-            .addition;
+        operation = AppLocalization.of(ctx).addition;
         break;
       case GameType.subtraction:
-        operation = AppLocalization
-            .of(ctx)
-            .subtraction;
+        operation = AppLocalization.of(ctx).subtraction;
         break;
     }
 

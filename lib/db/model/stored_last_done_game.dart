@@ -6,6 +6,11 @@ class StoredLastDoneGame {
   final GameTag gameTag;
   final DateTime dateTime;
 
+  StoredLastDoneGame({
+    this.gameTag,
+    this.dateTime
+  });
+
   StoredLastDoneGame.from(GameLastTimeDoneData entry):
       gameTag = GameTag.values.firstWhere((t) => t.toString() == entry.gameTag),
       dateTime = entry.lastTimeDone;

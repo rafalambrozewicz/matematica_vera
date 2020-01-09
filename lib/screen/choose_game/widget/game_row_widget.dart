@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:matematica_vera/config/app_localization.dart';
 import 'package:matematica_vera/config/app_style.dart';
 import 'package:matematica_vera/core/navigator.dart';
-import 'package:matematica_vera/game/game.dart';
 import 'package:matematica_vera/game/game_builder.dart';
 import 'package:matematica_vera/game/game_config.dart';
 import 'package:matematica_vera/game/game_type.dart';
@@ -83,7 +82,7 @@ class GameRowWidget extends StatelessWidget {
 
       final dateTimeText = formatDate(
           lastTimeDoneOrNull.toLocal(),
-          [yyyy, ".", MM, ".", dd, " ", HH, ":", mm]);
+          [yyyy, ".", mm, ".", dd, " ", HH, ":", nn]);
 
       return "$lastTimeDoneText $dateTimeText";
     }
