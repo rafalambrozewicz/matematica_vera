@@ -35,7 +35,9 @@ class GameBloc extends Bloc<GameBlocEvent, GameBlocState> {
       final game = (await _currentGameOrNull(config));
 
       if (isAnswerCorrect(event.answer, game)) {
-        yield DisplayCorrectAnswer.from(state, correctAnswer: event.answer);
+        yield DisplayCorrectAnswer.from(state,
+            correctAnswer: event.answer,
+            exerciseText: game.game.exercises[game.game.currentExerciseNumber].riddleAnswered);
         final updatedStoredGame = StoredGame.toNextExercise(game);
 
         if (updatedStoredGame.game.currentExerciseNumber == config.exerciseCount) {
@@ -51,7 +53,7 @@ class GameBloc extends Bloc<GameBlocEvent, GameBlocState> {
         await Future.delayed(Duration(milliseconds: _highlight_selected_answer_duration_millis), () { });
 
         if (updatedStoredGame.game.currentExerciseNumber == config.exerciseCount) {
-          yield ExerciseFinished.from(_game(updatedStoredGame));
+          yield ExerciseFinished.from(state);
         } else {
           yield DisplayExercise.from(_game(updatedStoredGame));
         }

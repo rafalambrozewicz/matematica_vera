@@ -1,10 +1,13 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 class RiddleTextWidget extends StatefulWidget {
 
   final String text;
+  final Color color;
 
-  const RiddleTextWidget({Key key, @required this.text}) : super(key: key);
+  const RiddleTextWidget({Key key, @required this.text, @required this.color}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _RiddleTextWidgetState();
@@ -13,36 +16,46 @@ class RiddleTextWidget extends StatefulWidget {
 class _RiddleTextWidgetState extends State<RiddleTextWidget> with SingleTickerProviderStateMixin {
 
   AnimationController _animationController;
-  Animation _colorTween;
-
 
   @override
   void initState() {
     super.initState();
     _animationController = AnimationController(
         vsync: this,
-        duration: Duration(milliseconds: 200));
-    _colorTween = ColorTween(
-      begin: Colors.green, end: Colors.red,
-    ).animate(_animationController);
-
-    _animationController.forward();
+        duration: Duration(milliseconds: 300))
+      ..repeat();
   }
 
   @override
   void dispose() {
-    _animationController.dispose();
+    _animationController?.dispose();
     super.dispose();
   }
 
   @override
-  Widget build(BuildContext context) => Expanded(
-    child: Center(
+  Widget build(BuildContext context) => AnimatedBuilder(
+    animation: _animationController,
+    builder: (context, child) => Center(
       child: Text(
         widget.text,
         style: TextStyle(
           fontSize: 72.0,
-          color: _colorTween.value,
+          color: TweenSequence<Color>([
+            TweenSequenceItem(
+              weight: 2.0,
+              tween: ColorTween(
+                begin: Colors.black,
+                end: widget.color,
+              ),
+            ),
+            TweenSequenceItem(
+              weight: 1.0,
+              tween: ColorTween(
+                begin: widget.color,
+                end: Colors.black,
+              ),
+            )
+          ]).evaluate(AlwaysStoppedAnimation(_animationController.value)),
         ),
       ),
     ),

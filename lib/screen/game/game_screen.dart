@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:matematica_vera/config/app_localization.dart';
+import 'package:matematica_vera/core/navigator.dart';
 import 'package:matematica_vera/game/game_config.dart';
 import 'package:matematica_vera/game/game_type.dart';
 import 'package:matematica_vera/screen/game/game_bloc.dart';
@@ -8,6 +10,7 @@ import 'package:matematica_vera/screen/game/game_bloc_events.dart';
 import 'package:matematica_vera/screen/game/game_bloc_states.dart';
 import 'package:matematica_vera/screen/game/widget/options_widget.dart';
 import 'package:matematica_vera/screen/game/widget/progress_widget.dart';
+import 'package:matematica_vera/screen/game/widget/riddle_text_widget.dart';
 import 'package:matematica_vera/widget/loading_widget.dart';
 
 class GameScreen extends StatefulWidget {
@@ -47,7 +50,7 @@ class _GameScreenState extends State<GameScreen> {
                 state is DisplayWrongAnswer) {
               w = _buildExerciseScreen(state);
             } else if (state is ExerciseFinished) {
-              w = _buildBackOrReplaySection();
+              w = _buildBackOrReplaySection(context);
             }
 
             return Scaffold(
@@ -68,19 +71,16 @@ class _GameScreenState extends State<GameScreen> {
             maxValue: state.exerciseCount,
           ),
           Expanded(
-            child: Center(
-              child: Text(
-                state.exerciseText,
-                style: TextStyle(
-                  fontSize: 72.0,
-                ),
-              ),
+            child: RiddleTextWidget(
+              text: state.exerciseText,
+              color: _determineTextColor(state),
             ),
           ),
           OptionsWidget(
+              optionToHighlight: _determineValueToHighlight(state),
+              color: _determineBackgroundColor(state),
               options: state.possibleAnswers,
-              onOptionTap: (String number) =>
-                  _bloc.add(AnswerSelected(number))),
+              onOptionTap: _determineOnTapFunction(state)),
         ],
       );
 
@@ -98,5 +98,99 @@ class _GameScreenState extends State<GameScreen> {
     return "$operation, <0;${config.maxNumber}>";
   }
 
-  Widget _buildBackOrReplaySection() => Placeholder();
+  Color _determineTextColor(GameBlocState state) {
+    if (state is DisplayCorrectAnswer) {
+      return Colors.green;
+    } else if (state is DisplayWrongAnswer) {
+      return Colors.red;
+    }
+
+    return Colors.black;
+  }
+
+  Color _determineBackgroundColor(GameBlocState state) {
+    if (state is DisplayCorrectAnswer) {
+      return Colors.green;
+    } else if (state is DisplayWrongAnswer) {
+      return Colors.red;
+    }
+
+    return Colors.transparent;
+  }
+
+  String _determineValueToHighlight(GameBlocState state) {
+    if (state is DisplayCorrectAnswer) {
+      return state.correctAnswer;
+    } else if (state is DisplayWrongAnswer) {
+      return state.wrongAnswer;
+    }
+
+    return null;
+  }
+
+  Function _determineOnTapFunction(GameBlocState state) {
+    if (state is DisplayCorrectAnswer) {
+      return null;
+    } else if (state is DisplayWrongAnswer) {
+      return null;
+    }
+
+    return (String number) => _bloc.add(AnswerSelected(number));
+  }
+
+  Widget _buildBackOrReplaySection(BuildContext context) {
+    final loc = AppLocalization.of(context);
+
+    return Center(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  loc.exercise_done.toUpperCase(),
+                  style: TextStyle(fontSize: 20.0),),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  "✓ ${loc.good_job}",
+                  style: TextStyle(fontSize: 32.0),),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+                    height: 72.0,
+                    child: OutlineButton(
+                      onPressed: () => popScreen(context),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                        Icon(Icons.arrow_back, size: 56.0,),
+                        Text(loc.go_back,
+                        style: TextStyle(fontSize: 32.0),),
+                      ],),
+                    ),
+                  ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+                    height: 72.0,
+                    child: OutlineButton(
+                      onPressed: () => _bloc.add(Initialize()),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Icon(Icons.repeat, size: 56.0,),
+                          Text(loc.repeat,
+                            style: TextStyle(fontSize: 32.0),),
+                        ],),
+                    ),
+                  ),
+              ),
+            ],
+      ),
+    );
+  }
 }

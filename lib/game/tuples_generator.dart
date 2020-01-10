@@ -24,7 +24,7 @@ class TuplesGenerator {
     numbers.shuffle(random);
 
     if (numbers.length > desiredCount) {
-      numbers = numbers.take(desiredCount);
+      numbers = numbers.take(desiredCount).toList();
     }
 
     if (numbers.length < desiredCount) {
