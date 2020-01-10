@@ -27,10 +27,11 @@ class ChooseGameScreen extends StatelessWidget {
         body: SingleChildScrollView(
           child: Column(
             children: [
-              _buildGameRowWidget(GameTag.addition_r10, selectGameData),
-              _buildGameRowWidget(GameTag.subtraction_r10, selectGameData),
-              _buildGameRowWidget(GameTag.addition_r20, selectGameData),
-              _buildGameRowWidget(GameTag.subtraction_r20, selectGameData),
+              _buildGameRowWidget(GameTag.addition_r10_e10, selectGameData),
+              _buildGameRowWidget(GameTag.addition_r10_e100, selectGameData),
+              _buildGameRowWidget(GameTag.subtraction_r10_e100, selectGameData),
+              _buildGameRowWidget(GameTag.addition_r20_e250, selectGameData),
+              _buildGameRowWidget(GameTag.subtraction_r20_e250, selectGameData),
             ],
           ),
         ),

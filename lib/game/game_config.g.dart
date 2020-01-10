@@ -47,10 +47,11 @@ T _$enumDecode<T>(
 }
 
 const _$GameTagEnumMap = {
-  GameTag.addition_r10: 'addition_r10',
-  GameTag.subtraction_r10: 'subtraction_r10',
-  GameTag.addition_r20: 'addition_r20',
-  GameTag.subtraction_r20: 'subtraction_r20',
+  GameTag.addition_r10_e10: 'addition_r10_e10',
+  GameTag.addition_r10_e100: 'addition_r10_e100',
+  GameTag.subtraction_r10_e100: 'subtraction_r10_e100',
+  GameTag.addition_r20_e250: 'addition_r20_e250',
+  GameTag.subtraction_r20_e250: 'subtraction_r20_e250',
 };
 
 const _$GameTypeEnumMap = {
