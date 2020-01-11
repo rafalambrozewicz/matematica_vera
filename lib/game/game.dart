@@ -70,5 +70,4 @@ class Game {
             .toList(growable: false);
     }
   }
-
 }

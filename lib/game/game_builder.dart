@@ -9,7 +9,6 @@ enum GameTag {
   subtraction_r20_e250,
 }
 
-
 class GameConfigBuilder {
 
   static forTag(GameTag tag) {

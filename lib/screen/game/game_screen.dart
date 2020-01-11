@@ -8,6 +8,7 @@ import 'package:matematica_vera/game/game_type.dart';
 import 'package:matematica_vera/screen/game/game_bloc.dart';
 import 'package:matematica_vera/screen/game/game_bloc_events.dart';
 import 'package:matematica_vera/screen/game/game_bloc_states.dart';
+import 'package:matematica_vera/screen/game/widget/exercise_done_widget.dart';
 import 'package:matematica_vera/screen/game/widget/options_widget.dart';
 import 'package:matematica_vera/screen/game/widget/progress_widget.dart';
 import 'package:matematica_vera/screen/game/widget/riddle_text_widget.dart';
@@ -23,7 +24,6 @@ class GameScreen extends StatefulWidget {
 }
 
 class _GameScreenState extends State<GameScreen> {
-  int currentExerciseNumber = 0;
 
   GameBloc _bloc;
 
@@ -50,7 +50,10 @@ class _GameScreenState extends State<GameScreen> {
                 state is DisplayWrongAnswer) {
               w = _buildExerciseScreen(state);
             } else if (state is ExerciseFinished) {
-              w = _buildBackOrReplaySection(context);
+              w = ExerciseDoneWidget(
+                onBackTaped: () => popScreen(context),
+                onRepeatTaped: () => _bloc.add(Initialize()),
+              );
             }
 
             return Scaffold(
@@ -136,61 +139,5 @@ class _GameScreenState extends State<GameScreen> {
     }
 
     return (String number) => _bloc.add(AnswerSelected(number));
-  }
-
-  Widget _buildBackOrReplaySection(BuildContext context) {
-    final loc = AppLocalization.of(context);
-
-    return Center(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  loc.exercise_done.toUpperCase(),
-                  style: TextStyle(fontSize: 20.0),),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  "✓ ${loc.good_job}",
-                  style: TextStyle(fontSize: 32.0),),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Container(
-                    height: 72.0,
-                    child: OutlineButton(
-                      onPressed: () => popScreen(context),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                        Icon(Icons.arrow_back, size: 56.0,),
-                        Text(loc.go_back,
-                        style: TextStyle(fontSize: 32.0),),
-                      ],),
-                    ),
-                  ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Container(
-                    height: 72.0,
-                    child: OutlineButton(
-                      onPressed: () => _bloc.add(Initialize()),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          Icon(Icons.repeat, size: 56.0,),
-                          Text(loc.repeat,
-                            style: TextStyle(fontSize: 32.0),),
-                        ],),
-                    ),
-                  ),
-              ),
-            ],
-      ),
-    );
   }
 }
