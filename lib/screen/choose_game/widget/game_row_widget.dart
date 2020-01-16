@@ -10,7 +10,8 @@ import 'package:matematica_vera/screen/game/game_screen.dart';
 
 class GameRowWidget extends StatelessWidget {
   static const _height = 88.0;
-  static const _padding = 16.0;
+  static const _horizontalPadding = 16.0;
+  static const _verticalPadding = 8.0;
 
   final GameTag gameTag;
   final DateTime lastTimeDoneOrNull;
@@ -30,7 +31,7 @@ class GameRowWidget extends StatelessWidget {
       onTap: () => pushScreen(context, GameScreen(config: config)),
       child: Container(
         height: _height,
-        padding: EdgeInsets.symmetric(horizontal: _padding, vertical: _padding),
+        padding: EdgeInsets.symmetric(horizontal: _horizontalPadding, vertical: _verticalPadding),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
