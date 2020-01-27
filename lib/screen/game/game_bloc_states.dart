@@ -1,10 +1,14 @@
 abstract class GameBlocState {
+  final bool showErrors;
+  final int numberOfErrors;
   final int currentExerciseNumber;
   final int exerciseCount;
   final String exerciseText;
   final List<String> possibleAnswers;
 
   GameBlocState(
+      this.showErrors,
+      this.numberOfErrors,
       this.currentExerciseNumber,
       this.exerciseCount,
       this.exerciseText,
@@ -12,15 +16,19 @@ abstract class GameBlocState {
 }
 
 class Loading extends GameBlocState {
-  Loading.initial() : super(0, 0, "", <String>[]);
+  Loading.initial({bool showErrors}) : super(showErrors, 0, 0, 0, "", <String>[]);
 
   Loading.from(
       GameBlocState state,
-      { int currentExerciseNumber,
+      { bool showErrors,
+        int numberOfErrors,
+        int currentExerciseNumber,
         int exerciseCount,
         String exerciseText,
         List<String> possibleAnswers})
       : super(
+      showErrors ?? state.showErrors,
+      numberOfErrors ?? state.numberOfErrors,
       currentExerciseNumber ?? state.currentExerciseNumber,
       exerciseCount ?? state.exerciseCount,
       exerciseText ?? state.exerciseText,
@@ -30,11 +38,15 @@ class Loading extends GameBlocState {
 class DisplayExercise extends GameBlocState {
   DisplayExercise.from(
       GameBlocState state,
-      { int currentExerciseNumber,
+      { bool showErrors,
+        int numberOfErrors,
+        int currentExerciseNumber,
         int exerciseCount,
         String exerciseText,
         List<String> possibleAnswers})
       : super(
+      showErrors ?? state.showErrors,
+      numberOfErrors ?? state.numberOfErrors,
       currentExerciseNumber ?? state.currentExerciseNumber,
       exerciseCount ?? state.exerciseCount,
       exerciseText ?? state.exerciseText,
@@ -47,11 +59,15 @@ class DisplayCorrectAnswer extends GameBlocState {
   DisplayCorrectAnswer.from(
       GameBlocState state,
       { this.correctAnswer,
+        bool showErrors,
+        int numberOfErrors,
         int currentExerciseNumber,
         int exerciseCount,
         String exerciseText,
         List<String> possibleAnswers})
       : super(
+      showErrors ?? state.showErrors,
+      numberOfErrors ?? state.numberOfErrors,
       currentExerciseNumber ?? state.currentExerciseNumber,
       exerciseCount ?? state.exerciseCount,
       exerciseText ?? state.exerciseText,
@@ -64,11 +80,15 @@ class DisplayWrongAnswer extends GameBlocState {
   DisplayWrongAnswer.from(
       GameBlocState state,
       { this.wrongAnswer,
+        bool showErrors,
+        int numberOfErrors,
         int currentExerciseNumber,
         int exerciseCount,
         String exerciseText,
         List<String> possibleAnswers})
       : super(
+      showErrors ?? state.showErrors,
+      numberOfErrors ?? state.numberOfErrors,
       currentExerciseNumber ?? state.currentExerciseNumber,
       exerciseCount ?? state.exerciseCount,
       exerciseText ?? state.exerciseText,
@@ -78,11 +98,15 @@ class DisplayWrongAnswer extends GameBlocState {
 class ExerciseFinished extends GameBlocState {
   ExerciseFinished.from(
       GameBlocState state,
-      { int currentExerciseNumber,
+      { bool showErrors,
+        int numberOfErrors,
+        int currentExerciseNumber,
         int exerciseCount,
         String exerciseText,
         List<String> possibleAnswers})
       : super(
+      showErrors ?? state.showErrors,
+      numberOfErrors ?? state.numberOfErrors,
       currentExerciseNumber ?? state.currentExerciseNumber,
       exerciseCount ?? state.exerciseCount,
       exerciseText ?? state.exerciseText,

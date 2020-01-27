@@ -14,7 +14,7 @@ description: App supporting math learning process for kids
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.1.0 <3.0.0"
+  sdk: ">=2.7.0 <3.0.0"
 
 dependencies:
   flutter:
@@ -31,6 +31,9 @@ dependencies:
   json_serializable: ^3.2.0
   rxdart: ^0.23.1
   date_format: ^1.0.8
+  toast: ^0.1.5
+  flutter_slidable: ^0.5.4
+  uuid: ^2.0.4
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.

@@ -3,11 +3,11 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:matematica_vera/config/app_localization.dart';
 import 'package:matematica_vera/core/navigator.dart';
-import 'package:matematica_vera/game/game_config.dart';
-import 'package:matematica_vera/game/game_type.dart';
+import 'package:matematica_vera/domain/game_config.dart';
 import 'package:matematica_vera/screen/game/game_bloc.dart';
 import 'package:matematica_vera/screen/game/game_bloc_events.dart';
 import 'package:matematica_vera/screen/game/game_bloc_states.dart';
+import 'package:matematica_vera/screen/game/widget/errors_count.dart';
 import 'package:matematica_vera/screen/game/widget/exercise_done_widget.dart';
 import 'package:matematica_vera/screen/game/widget/options_widget.dart';
 import 'package:matematica_vera/screen/game/widget/progress_widget.dart';
@@ -51,6 +51,7 @@ class _GameScreenState extends State<GameScreen> {
               w = _buildExerciseScreen(state);
             } else if (state is ExerciseFinished) {
               w = ExerciseDoneWidget(
+                numberOfErrorOrNull: state.showErrors ? state.numberOfErrors : null,
                 onBackTaped: () => popScreen(context),
                 onRepeatTaped: () => _bloc.add(Initialize()),
               );
@@ -58,7 +59,7 @@ class _GameScreenState extends State<GameScreen> {
 
             return Scaffold(
                 appBar: AppBar(
-                  title: Text(_genGameName(context, widget.config)),
+                  title: Text(widget.config.longTitle(AppLocalization.of(context))),
                   centerTitle: true,
                   backgroundColor: Colors.transparent,
                 ),
@@ -74,9 +75,15 @@ class _GameScreenState extends State<GameScreen> {
             maxValue: state.exerciseCount,
           ),
           Expanded(
-            child: RiddleTextWidget(
-              text: state.exerciseText,
-              color: _determineTextColor(state),
+            child: Stack(
+              children: [
+                state.showErrors ? ErrorsCount(
+                  numberOfErrors: state.numberOfErrors,) : Container(),
+                RiddleTextWidget(
+                  text: state.exerciseText,
+                  color: _determineTextColor(state),
+                ),
+              ]
             ),
           ),
           OptionsWidget(
@@ -86,20 +93,6 @@ class _GameScreenState extends State<GameScreen> {
               onOptionTap: _determineOnTapFunction(state)),
         ],
       );
-
-  String _genGameName(BuildContext ctx, GameConfig config) {
-    String operation;
-    switch (config.type) {
-      case GameType.addition:
-        operation = AppLocalization.of(ctx).addition;
-        break;
-      case GameType.subtraction:
-        operation = AppLocalization.of(ctx).subtraction;
-        break;
-    }
-
-    return "$operation, <0;${config.maxNumber}>";
-  }
 
   Color _determineTextColor(GameBlocState state) {
     if (state is DisplayCorrectAnswer) {

@@ -1,46 +1,47 @@
 import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:matematica_vera/config/app_localization.dart';
 import 'package:matematica_vera/config/app_style.dart';
 import 'package:matematica_vera/core/navigator.dart';
-import 'package:matematica_vera/game/game_builder.dart';
-import 'package:matematica_vera/game/game_config.dart';
-import 'package:matematica_vera/game/game_type.dart';
+import 'package:matematica_vera/domain/game_config.dart';
 import 'package:matematica_vera/screen/game/game_screen.dart';
 
 class GameRowWidget extends StatelessWidget {
   static const _height = 88.0;
   static const _horizontalPadding = 16.0;
-  static const _verticalPadding = 8.0;
 
-  final GameTag gameTag;
+  final GameConfig gameConfig;
   final DateTime lastTimeDoneOrNull;
   final bool isInProgress;
 
   const GameRowWidget({
     Key key,
-    @required this.gameTag,
+    @required this.gameConfig,
     @required this.lastTimeDoneOrNull,
     @required this.isInProgress}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final config = GameConfigBuilder.forTag(gameTag);
+    AppLocalization _loc = AppLocalization.of(context);
 
     return InkWell(
-      onTap: () => pushScreen(context, GameScreen(config: config)),
+      onTap: () => pushScreen(context, GameScreen(config: gameConfig)),
       child: Container(
+        color: gameConfig.color,
         height: _height,
-        padding: EdgeInsets.symmetric(horizontal: _horizontalPadding, vertical: _verticalPadding),
+        padding: EdgeInsets.symmetric(horizontal: _horizontalPadding, vertical: 0.0),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(_getOperation(context, config), style: AppStyle.listFirstLine,),
-                Text("${AppLocalization.of(context).range} <0;${config.maxNumber}>, ${config.exerciseCount} ${AppLocalization.of(context).exercises}", style: AppStyle.listSecondaryLine),
+                Text(gameConfig.title(_loc), style: AppStyle.listFirstLine,),
+                _separator(),
+                Text("${_loc.range} <${gameConfig.minNumber};${gameConfig.maxNumber}>, ${gameConfig.numberOfExercises} ${_loc.exercises}", style: AppStyle.listSecondaryLine),
+                _separator(),
                 Text(_getStatusRow(context), style: AppStyle.listSecondaryLine),
               ],
             ),
@@ -51,15 +52,7 @@ class GameRowWidget extends StatelessWidget {
     );
   }
 
-  String _getOperation(BuildContext ctx, GameConfig config) {
-    switch (config.type) {
-      case GameType.addition:
-        return AppLocalization.of(ctx).addition;
-
-      case GameType.subtraction:
-        return AppLocalization.of(ctx).subtraction;
-    }
-  }
+  Widget _separator() => Container(height: 2.0);
 
   String _getStatusRow(BuildContext ctx) {
     final isInProgressText = _getIsInProgress(ctx, isInProgress);
@@ -73,13 +66,13 @@ class GameRowWidget extends StatelessWidget {
   }
 
   String _getIsInProgress(BuildContext ctx, bool isInProgress) =>
-      isInProgress ? AppLocalization.of(ctx).in_progress : "";
+      isInProgress ? AppLocalization.of(ctx).inProgress : "";
 
   String _getLastTimeDone(BuildContext ctx, DateTime lastTimeDoneOrNull) {
     if (lastTimeDoneOrNull == null) {
-      return AppLocalization.of(ctx).never_done;
+      return AppLocalization.of(ctx).neverDone;
     } else {
-      final lastTimeDoneText = AppLocalization.of(ctx).last_done;
+      final lastTimeDoneText = AppLocalization.of(ctx).lastDone;
 
       final dateTimeText = formatDate(
           lastTimeDoneOrNull.toLocal(),

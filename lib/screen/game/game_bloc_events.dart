@@ -1,4 +1,4 @@
-import 'package:matematica_vera/game/game_config.dart';
+import 'package:matematica_vera/domain/game_config.dart';
 
 abstract class GameBlocEvent { }
 

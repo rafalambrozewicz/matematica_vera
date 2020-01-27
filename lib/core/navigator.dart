@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-pushScreen(BuildContext ctx, Widget screen) {
-  Navigator.of(ctx)
+pushScreen(BuildContext context, Widget screen) {
+  Navigator.of(context)
       .push(MaterialPageRoute(builder: (BuildContext context) => screen));
 }
 
-popScreen(BuildContext ctx,) {
-  Navigator.of(ctx).pop();
+popScreen(BuildContext context) {
+  Navigator.of(context).pop();
 }

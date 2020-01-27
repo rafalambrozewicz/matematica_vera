@@ -2,10 +2,9 @@ import 'dart:math';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:matematica_vera/db/db_client.dart';
-import 'package:matematica_vera/db/model/stored_game.dart';
 import 'package:matematica_vera/db/model/stored_last_done_game.dart';
-import 'package:matematica_vera/game/game.dart';
-import 'package:matematica_vera/game/game_config.dart';
+import 'package:matematica_vera/domain/game.dart';
+import 'package:matematica_vera/domain/game_config.dart';
 import 'package:matematica_vera/screen/game/game_bloc_events.dart';
 import 'package:matematica_vera/screen/game/game_bloc_states.dart';
 
@@ -18,7 +17,7 @@ class GameBloc extends Bloc<GameBlocEvent, GameBlocState> {
   GameBloc(this.config);
 
   @override
-  GameBlocState get initialState => Loading.initial();
+  GameBlocState get initialState => Loading.initial(showErrors: config.showErrorsCount);
 
   @override
   Stream<GameBlocState> mapEventToState(GameBlocEvent event) async*{
@@ -37,22 +36,22 @@ class GameBloc extends Bloc<GameBlocEvent, GameBlocState> {
       if (isAnswerCorrect(event.answer, game)) {
         yield DisplayCorrectAnswer.from(state,
             correctAnswer: event.answer,
-            exerciseText: game.game.exercises[game.game.currentExerciseNumber].riddleAnswered);
-        final updatedStoredGame = StoredGame.toNextExercise(game);
+            exerciseText: game.exercises[game.currentExerciseNumber].riddleAnswered);
+        final updatedStoredGame = Game.toNextExercise(game);
 
-        if (updatedStoredGame.game.currentExerciseNumber == config.exerciseCount) {
-          await dbClient.removeStoredGame(config.gameTag);
+        if (updatedStoredGame.currentExerciseNumber == config.numberOfExercises) {
+          await dbClient.removeGame(config.id);
           await dbClient.insertStoredLastDoneGame(StoredLastDoneGame(
-            gameTag: config.gameTag,
+            id: config.id,
             dateTime: DateTime.now().toUtc()
           ));
         } else {
-          await dbClient.insertStoredGame(updatedStoredGame);
+          await dbClient.insertGame(updatedStoredGame);
         }
 
         await Future.delayed(Duration(milliseconds: _highlight_selected_answer_duration_millis), () { });
 
-        if (updatedStoredGame.game.currentExerciseNumber == config.exerciseCount) {
+        if (updatedStoredGame.currentExerciseNumber == config.numberOfExercises) {
           yield ExerciseFinished.from(state);
         } else {
           yield DisplayExercise.from(_game(updatedStoredGame));
@@ -60,38 +59,40 @@ class GameBloc extends Bloc<GameBlocEvent, GameBlocState> {
       } else {
         yield DisplayWrongAnswer.from(state, wrongAnswer: event.answer);
 
+        final updatedStoredGame = Game.addError(game);
+        await dbClient.insertGame(updatedStoredGame);
+
         await Future.delayed(Duration(milliseconds: _highlight_selected_answer_duration_millis), () { });
 
-        yield DisplayExercise.from(_game(game));
+        yield DisplayExercise.from(_game(updatedStoredGame));
       }
     }
   }
 
-  Future<StoredGame> _currentGameOrNull(GameConfig config) async =>
-      dbClient.getGameOrNull(config.gameTag);
+  Future<Game> _currentGameOrNull(GameConfig config) async =>
+      dbClient.getGameOrNull(config.id);
 
-  Future<StoredGame> _newlyInitializedGame(GameConfig config) async {
+  Future<Game> _newlyInitializedGame(GameConfig config) async {
     final generatedGame = Game.fromConfig(config);
-    await dbClient.insertStoredGame(StoredGame(
-        gameTag: config.gameTag,
-        game: generatedGame));
+    await dbClient.insertGame(generatedGame);
     return _currentGameOrNull(config);
   }
 
-  GameBlocState _game(StoredGame storedGame) {
-    final e = storedGame.game.exercises[storedGame.game.currentExerciseNumber];
+  GameBlocState _game(Game storedGame) {
+    final e = storedGame.exercises[storedGame.currentExerciseNumber];
     final possibleAnswers = e.possibleAnswers;
     possibleAnswers.shuffle(Random());
 
     return DisplayExercise.from(
         state,
-        currentExerciseNumber: storedGame.game.currentExerciseNumber,
-        exerciseCount:config.exerciseCount,
+        numberOfErrors: storedGame.errorCount,
+        currentExerciseNumber: storedGame.currentExerciseNumber,
+        exerciseCount:config.numberOfExercises,
         exerciseText: e.riddleObscured,
         possibleAnswers: possibleAnswers
     );
   }
 
-  bool isAnswerCorrect(String answer, StoredGame storedGame)  => answer ==
-    storedGame.game.exercises[storedGame.game.currentExerciseNumber].correctAnswer;
+  bool isAnswerCorrect(String answer, Game storedGame)  => answer ==
+    storedGame.exercises[storedGame.currentExerciseNumber].correctAnswer;
 }

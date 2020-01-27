@@ -12,11 +12,13 @@ class ExerciseDoneWidget extends StatelessWidget {
     "🎁", // Wrapped Gift
   ];
 
+  final int numberOfErrorOrNull;
   final Function onBackTaped;
   final Function onRepeatTaped;
 
   const ExerciseDoneWidget({
     Key key,
+    @required this.numberOfErrorOrNull,
     @required this.onBackTaped,
     @required this.onRepeatTaped}) : super(key: key);
 
@@ -39,15 +41,21 @@ class ExerciseDoneWidget extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Text(
-                loc.exercise_done.toUpperCase(),
+                loc.exerciseDone.toUpperCase(),
                 style: TextStyle(fontSize: 20.0),),
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Text(
-                "✓ ${loc.good_job}",
+                "✓ ${loc.goodJob}",
                 style: TextStyle(fontSize: 32.0),),
             ),
+            numberOfErrorOrNull!= null ? Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                "$numberOfErrorOrNull ${loc.errors}",
+                style: TextStyle(fontSize: 20.0),),
+            ) : Container(),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Container(
@@ -58,7 +66,7 @@ class ExerciseDoneWidget extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       Icon(Icons.arrow_back, size: 56.0,),
-                      Text(loc.go_back,
+                      Text(loc.goBack,
                         style: TextStyle(fontSize: 32.0),),
                     ],),
                 ),

@@ -1,23 +1,22 @@
 import 'package:matematica_vera/db/core/db_config.dart';
-import 'package:matematica_vera/game/game_builder.dart';
 import 'package:moor/moor.dart';
 
 class StoredLastDoneGame {
-  final GameTag gameTag;
+  final String id;
   final DateTime dateTime;
 
   StoredLastDoneGame({
-    this.gameTag,
+    this.id,
     this.dateTime
   });
 
   StoredLastDoneGame.from(GameLastTimeDoneData entry):
-      gameTag = GameTag.values.firstWhere((t) => t.toString() == entry.gameTag),
+      id = entry.id,
       dateTime = entry.lastTimeDone;
 
   GameLastTimeDoneCompanion toGameLastTimeDoneCompanion() =>
       GameLastTimeDoneCompanion(
-        gameTag: Value(gameTag.toString()),
+        id: Value(id),
         lastTimeDone: Value(dateTime),
       );
 }
