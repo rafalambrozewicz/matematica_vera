@@ -1,16 +1,13 @@
-# matematica_vera
+# _matematica vera_ mobile app
 
-App supporting math learning process for kids
+## Overview
 
-## Getting Started
+_Matematica vera_ is a mobile app, that helps children get familiar with the basics of mathematics. It features a list of games where the user is presented with a number of mathematical tasks like addition, subtraction, multiplication or division. For each of them, several answers are shown. By selecting the correct answer user goes to the next task, selecting the incorrect one increases errors count and shuffles possible answers. Additionally, the app features a game creator where user can define their games.
 
-This project is a starting point for a Flutter application.
+![App screenshots](/promo/screenshots.jpg "App screenshots")
 
-A few resources to get you started if this is your first Flutter project:
+App got written in Dart using the Flutter framework. It uses `flutter_bloc` to manage games' states, `moor` database to store games' templates, games' states and last time game done timestamps, `json_serilizable` to (surprise) serialize object to/from JSON and `flutter_localizations` for internationalization (app is available in English, Polish and Italian).
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+## Installing
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Please refer to the [official documentation](https://flutter.dev/docs/get-started/install) to learn how to set up Flutter on your machine, build the app for the desired platform, install on your device and run.  Also, please notice, that the app was never tested on iOS phones.
