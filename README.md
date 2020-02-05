@@ -1,4 +1,6 @@
-# _matematica vera_ mobile app
+<p align="center">
+  <img src="promo/logo.png" alt="matematica vera"/>
+</p>
 
 ## Overview
 
