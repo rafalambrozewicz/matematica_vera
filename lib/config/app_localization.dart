@@ -89,7 +89,7 @@ class AppLocalization {
     },
     'it': {
       'app_name': 'matematica vera',
-      'addition': 'Aggiunta',
+      'addition': 'Addizione',
       'subtraction': 'Sottrazione',
       'multiplication': 'Moltiplicazione',
       'division': 'Divisione',
@@ -125,6 +125,7 @@ class AppLocalization {
       'errors': 'errori',
     },
   };
+
 
   String get appName => _localizedValues[locale.languageCode]['app_name'];
   String operation(OperationType ot) {
