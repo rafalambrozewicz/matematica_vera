@@ -126,7 +126,6 @@ class AppLocalization {
     },
   };
 
-
   String get appName => _localizedValues[locale.languageCode]['app_name'];
   String operation(OperationType ot) {
     switch (ot) {
